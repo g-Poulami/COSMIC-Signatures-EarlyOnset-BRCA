@@ -1,4 +1,4 @@
-# 🧬 COSMIC Mutational Signatures in Early-Onset vs Late-Onset Breast Cancer
+# COSMIC Mutational Signatures in Early-Onset vs Late-Onset Breast Cancer
 
 [![R](https://img.shields.io/badge/R-%3E%3D4.2-276DC3?style=flat-square&logo=r&logoColor=white)](https://www.r-project.org/)
 [![Bioconductor](https://img.shields.io/badge/Bioconductor-3.17+-1a9641?style=flat-square)](https://bioconductor.org/)
@@ -11,7 +11,7 @@
 
 ---
 
-## 📌 Overview
+## Overview
 
 This project investigates differences in **somatic mutational signatures** between **early-onset** (≤45 years) and **late-onset** (≥55 years) breast cancer patients using whole-exome sequencing (WXS) data from **The Cancer Genome Atlas Breast Invasive Carcinoma (TCGA-BRCA)** cohort.
 
@@ -19,7 +19,7 @@ Mutational signatures reflect the underlying biological processes — DNA repair
 
 ---
 
-## 🧪 Scientific Background
+## Scientific Background
 
 | Signature | Biological Process | Relevance to BRCA |
 |-----------|-------------------|-------------------|
@@ -33,7 +33,7 @@ Early-onset breast cancer is often associated with germline BRCA1/2 mutations an
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```
 COSMIC-Signatures-EarlyOnset-BRCA/
@@ -68,7 +68,7 @@ COSMIC-Signatures-EarlyOnset-BRCA/
 
 ---
 
-## 🔬 Data
+## Data
 
 | Property | Details |
 |----------|---------|
@@ -83,7 +83,7 @@ COSMIC-Signatures-EarlyOnset-BRCA/
 
 ---
 
-## ⚙️ Dependencies
+## Dependencies
 
 ### R Packages
 
@@ -120,7 +120,7 @@ install.packages(c(
 
 ---
 
-## 🚀 Reproducing the Analysis
+## Reproducing the Analysis
 
 ### 1. Clone the repository
 
@@ -168,7 +168,7 @@ Rscript scripts/plot_signatures.R
 
 ---
 
-## 📊 Outputs & Interpretation
+## Outputs & Interpretation
 
 ### `signature_stats_results.csv`
 
@@ -281,7 +281,7 @@ Assesses how well the COSMIC signature set reconstructs each sample's observed m
 
 ---
 
-## 🧠 Biological Interpretation
+## Biological Interpretation
 
 ### Expected findings based on literature
 
@@ -298,7 +298,7 @@ The results reveal **no statistically significant differences in COSMIC signatur
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 - Analysis restricted to WXS data; whole-genome sequencing would provide higher mutation counts and more reliable signature fitting
 - The Mann-Whitney U test is non-parametric but does not account for tumour purity, subtype heterogeneity (e.g. ER+/HER2+/TNBC), or technical batch effects
@@ -308,7 +308,7 @@ The results reveal **no statistically significant differences in COSMIC signatur
 
 ---
 
-## 📚 References
+## References
 
 1. Alexandrov et al. (2020). The repertoire of mutational signatures in human cancer. *Nature*, 578, 94–101.
 2. COSMIC Mutational Signatures v3.3.1 — https://cancer.sanger.ac.uk/signatures/
@@ -318,12 +318,12 @@ The results reveal **no statistically significant differences in COSMIC signatur
 
 ---
 
-## 👩‍💻 Author
+## Author
 
 **Poulami** — [@g-Poulami](https://github.com/g-Poulami)
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
