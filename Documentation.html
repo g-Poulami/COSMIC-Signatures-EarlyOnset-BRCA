@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+            background-color: #f4f7f9;
+        }
+        body {
+            font-family: 'Segoe UI', Calibri, sans-serif;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 24pt; }
+        h2 { 
+            color: #2980b9; 
+            border-left: 5px solid #2980b9; 
+            padding-left: 10px; 
+            margin-top: 30px;
+            font-size: 16pt;
+        }
+        h3 { color: #34495e; font-size: 13pt; }
+        .content { padding: 0 20px; }
+        code {
+            background-color: #e8ecef;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 10pt;
+            margin: 15px 0;
+            white-space: pre-wrap;
+        }
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mutational Signature Analysis</h1>
+        <p>Early-Onset vs. Late-Onset Breast Cancer (TCGA-BRCA)</p>
+    </div>
+    <div class="content">
+        <h2>Project Overview</h2>
+        <p>This analysis pipeline decomposes somatic mutation data from the TCGA-BRCA project into COSMIC v3.3 mutational signatures. The objective is to identify differential mutational processes between early-onset (<span class="math">&le; 45</span> years) and late-onset (<span class="math">&ge; 55</span> years) breast cancer cohorts.</p>
+
+        <h2>Methodology</h2>
+        <h3>1. Data Acquisition</h3>
+        <p>Somatic mutation data (MAF files) and clinical metadata are retrieved using <code>TCGAbiolinks</code>. We specifically target "Masked Somatic Mutations" to ensure high-quality variant calls.</p>
+        
+        <h3>2. Matrix Generation</h3>
+        <p>A 96-trinucleotide substitution matrix is constructed. This matrix counts the frequency of each mutation type (C>A, C>G, C>T, T>A, T>C, T>G) within its 5' and 3' flanking context.</p>
+
+        <h3>3. Signature Refitting</h3>
+        <p>We apply a non-negative least squares (NNLS) approach to refit the sample matrices against the known COSMIC v3.3 signatures. Key signatures of interest include:</p>
+        <ul>
+            <li><strong>SBS3:</strong> Homologous recombination deficiency (HRD).</li>
+            <li><strong>SBS2 & SBS13:</strong> APOBEC cytidine deaminase activity.</li>
+            <li><strong>SBS1 & SBS5:</strong> Endogenous clock-like processes.</li>
+        </ul>
+
+        <h2>Statistical Framework</h2>
+        <p>To compare signature exposures between cohorts, we employ the Mann-Whitney U test. The relative contribution <span class="math">C<sub>rel</sub></span> is calculated as:</p>
+        <div style="text-align:center; margin:1em 0; font-size:1.1em;">
+            <span class="math">C<sub>rel</sub> = E<sub>i</sub> / &Sigma; E<sub>j</sub></span>
+        </div>
+        <p>Where <span class="math">E<sub>i</sub></span> is the exposure of signature <span class="math">i</span> and the denominator represents the total mutational burden of the sample.</p>
+    </div>
+</body>
+</html>
