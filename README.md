@@ -46,12 +46,12 @@ COSMIC-Signatures-EarlyOnset-BRCA/
 │
 ├── results/
 │   ├── plots/
-│   │   ├── plot1_mutation_spectrum.pdf    # 96-channel trinucleotide profiles
-│   │   ├── plot2_stacked_bar.pdf         # Per-sample stacked bar chart
-│   │   ├── plot3_heatmap.pdf             # Signature exposure heatmap
-│   │   ├── plot4_boxplots.pdf            # Signature boxplots by group
-│   │   ├── plot5_volcano.pdf             # Volcano plot
-│   │   └── plot6_cosine_similarity.pdf   # Reconstruction quality
+│   │   ├── plot1_mutation_spectrum.jpg    # 96-channel trinucleotide profiles
+│   │   ├── plot2_stacked_bar.jpg         # Per-sample stacked bar chart
+│   │   ├── plot3_heatmap.jpg             # Signature exposure heatmap
+│   │   ├── plot4_boxplots.jpg            # Signature boxplots by group
+│   │   ├── plot5_volcano.jpg             # Volcano plot
+│   │   └── plot6_cosine_similarity.jpg   # Reconstruction quality
 │   └── data/
 │       ├── maf_combined.rds              # Combined MAF data (992 samples)
 │       ├── clinical.rds                  # Clinical metadata
@@ -189,90 +189,95 @@ Signatures with `P_adj < 0.05` and `|Log2FC| > 0.5` are considered statistically
 ---
 
 ### Plot 1 — 96-Channel Trinucleotide Mutation Spectrum
-**`results/plots/plot1_mutation_spectrum.pdf`**
 
-Shows the relative frequency of all 96 single base substitution (SBS) mutation types (6 substitution classes × 16 trinucleotide contexts) averaged across early-onset and late-onset patients separately.
+![96-Channel Trinucleotide Mutation Spectrum by Onset Group](results/plots/plot1_mutation_spectrum.jpg)
 
-**How to read it:** Each bar represents one of the 96 trinucleotide mutation contexts. The 6 colours correspond to the 6 base substitution types (C>A, C>G, C>T, T>A, T>C, T>G). Differences in bar heights between groups indicate shifts in the dominant mutational processes.
+**What is shown:** The relative frequency of all 96 single base substitution (SBS) mutation types across six substitution classes (C>A in blue, C>G in black, C>T in red, T>A in grey, T>C in green, T>G in pink), each broken into 16 trinucleotide contexts, averaged across patients in the early-onset (top row) and late-onset (bottom row) groups.
 
-**What to look for:**
-- Elevated C>T transitions at TpCpN contexts → APOBEC activity (SBS2/SBS13), potentially higher in early-onset
-- Elevated C>T at CpG dinucleotides → clock-like deamination (SBS1), potentially higher in late-onset
+**Detailed observations from this plot:**
+
+- **C>G transversions are the most visually striking feature of the early-onset spectrum.** Several contexts within the C>G panel (most notably T[C>G]T and a flanking context) show very tall black bars in early-onset that are substantially reduced in late-onset. This pattern is consistent with an active APOBEC-like or oxidative mutagenic process operating more prominently in younger patients.
+- **C>T transitions dominate both groups**, as expected for breast cancer. The tallest C>T bar across both groups corresponds to the T[C>T]A or similar TpCpN context, a hallmark of APOBEC activity (SBS2/SBS13). This peak appears modestly higher in early-onset relative to late-onset when normalised, suggesting a marginally greater APOBEC contribution in the younger cohort.
+- **C>A transversions (blue) show a notable asymmetry.** In the late-onset panel, a single tall blue bar emerges at the rightmost C>A context (likely T[C>A]T), which is absent or minimal in early-onset. This context can reflect SBS18 or oxidative damage accumulating with age.
+- **T>C, T>A, and T>G substitutions are uniformly low in both groups**, with no dramatic differences visible between panels, suggesting these processes (e.g., SBS5 clock-like damage, which distributes broadly across T>C contexts) do not create strongly context-specific peaks detectable at this resolution.
+- **Overall spectrum similarity:** The two profiles are broadly similar in shape — both are dominated by C>T and C>G — indicating that the major mutational processes are shared between age groups. Differences are quantitative rather than qualitative, which is consistent with the statistical results showing limited significance after FDR correction (see Plot 5).
 
 ---
 
 ### Plot 2 — Stacked Bar Chart of Signature Contributions
-**`results/plots/plot2_stacked_bar.pdf`**
 
-Displays the **relative contribution** of each COSMIC signature to every individual sample, with samples split by onset group. Only signatures with a mean relative exposure >1% across all samples are shown.
+![Relative COSMIC Signature Contributions per Sample](results/plots/plot2_stacked_bar.jpg)
 
-**How to read it:** Each vertical bar represents one patient sample. The coloured segments show the proportion of mutations attributed to each signature. Samples are ordered within each group.
+**What is shown:** The relative contribution of each COSMIC SBS signature to every individual sample (one vertical bar = one patient), split into early-onset (left panel) and late-onset (right panel). Each colour represents a distinct COSMIC signature; only signatures with a mean relative exposure >1% are displayed. The y-axis represents relative exposure (values above 1.0 indicate that the refitting algorithm assigned more total weight than the observed mutation count — an artefact of the refitting procedure in low-mutation-burden samples).
 
-**What to look for:**
-- Heterogeneity within groups (some samples dominated by SBS3, others by SBS5)
-- Whether early-onset samples show more SBS3/SBS2 enrichment as a group
-- Outlier samples with unusual signature profiles
+**Detailed observations from this plot:**
+
+- **Extreme inter-patient heterogeneity is the dominant feature in both groups.** No single signature uniformly dominates; instead, the colour composition of each bar varies dramatically from patient to patient. This reflects the well-known biological heterogeneity of breast cancer and is consistent with the diverse molecular subtypes (ER+, HER2+, TNBC) pooled together in TCGA-BRCA.
+- **Several outlier samples exceed a relative exposure of 1.0–2.3.** These samples, visible as very tall bars in both panels (particularly in late-onset where one sample reaches ~2.3), likely have very low total mutation counts, causing the NNLS/refitting algorithm to over-assign signature weights. These are statistical artefacts and should be treated with caution in downstream interpretation.
+- **SBS1 (teal/cyan, clock-like CpG deamination) contributes a consistent baseline across most samples in both groups,** visible as a common colour at the base of many bars. This is expected given that SBS1 accumulates with cell divisions throughout life and is nearly universal in cancer.
+- **SBS2 (salmon/pink-red, APOBEC) and SBS13 (coral-red, APOBEC) are visible as prominent coloured segments in a subset of samples in both groups,** not exclusively in early-onset. This suggests APOBEC-driven mutagenesis is heterogeneous and sample-specific rather than age-stratified at the group level.
+- **SBS5 (yellow-green, clock-like replication) appears to contribute a substantial yellow component at the base of many bars in both groups,** which is consistent with its role as a ubiquitous background process. It does not appear markedly higher in late-onset as a visual impression.
+- **Many minor signatures (SBS21, SBS24, SBS29, SBS39, SBS42, SBS86, SBS87) contribute small fragments** to individual samples and likely reflect sparse, sample-specific noise from the refitting, particularly in samples with low mutation burden.
+- **The early-onset panel appears slightly more compact** (fewer extreme outlier bars), while late-onset has more tall outlier spikes, likely because of greater sample size and therefore more extreme low-burden samples in the larger late-onset cohort.
 
 ---
 
 ### Plot 3 — Signature Exposure Heatmap
-**`results/plots/plot3_heatmap.pdf`**
 
-A clustered heatmap showing relative signature exposures across all samples (columns) and signatures (rows), with samples annotated by onset group (red = early, blue = late).
+![Signature Exposure Heatmap (Early vs Late Onset)](results/plots/plot3_heatmap.jpg)
 
-**How to read it:** Darker colours indicate higher relative exposure. Hierarchical clustering groups samples with similar signature profiles together. The colour annotation bar at the top shows group membership.
+**What is shown:** A hierarchically clustered heatmap where each column is a patient sample and each row is a COSMIC SBS signature. Colour intensity (white → orange → dark red) represents relative exposure magnitude. The annotation bar at the top of the heatmap colour-codes samples by group: red = early-onset, blue = late-onset. Row and column dendrograms reflect unsupervised hierarchical clustering.
 
-**What to look for:**
-- Clusters of early-onset samples co-localising with high SBS3 exposure
-- Separation of groups along the dendrogram suggesting distinct mutational landscapes
-- Signatures that are uniformly high or low across all samples
+**Detailed observations from this plot:**
+
+- **The column dendrogram does not separate early-onset from late-onset samples into distinct clusters.** The group annotation bar at the top shows a thoroughly interleaved distribution of red and blue samples across the entire dendrogram. This is a critical finding: the global signature profile of a tumour does not reliably predict which age group the patient belongs to. Mutational landscape is not a strong discriminator of onset age at the whole-signature-profile level.
+- **SBS2 and SBS13 (the two APOBEC signatures) cluster together at the top of the row dendrogram and show the highest intensity values in a subset of samples.** These high-exposure samples (visible as deep orange-to-red columns in the SBS2/SBS13 rows) are scattered across both early- and late-onset groups, reinforcing that APOBEC activity is a sample-specific rather than age-stratified phenomenon in this cohort.
+- **SBS87 clusters immediately below SBS2/SBS13,** suggesting that when APOBEC signatures are high, SBS87 also tends to be elevated in the same samples — possibly due to misattribution during the refitting process, or a genuine co-occurring process.
+- **SBS39, SBS7a, SBS10b, SBS42, SBS86, SBS6, SBS24, SBS50, SBS16, SBS54, SBS31, SBS29, SBS8, SBS22, SBS30, SBS19, SBS21, SBS7b, SBS59, SBS32, SBS58** all show predominantly pale/white colouration across almost all samples, indicating very low or near-zero relative exposures. Their presence in the refitting output likely reflects the statistical limits of signature attribution in WXS data with moderate mutation burden.
+- **SBS1 and SBS15 cluster at the bottom of the row dendrogram.** SBS1 shows a notable high-exposure cell in one or two early-onset samples (visible as a red square at the bottom-left of the heatmap), and some elevated exposure spread across several late-onset samples, consistent with its age-correlated nature — though the pattern is not uniform.
+- **The heatmap confirms that most samples have a signature profile characterised by a small number of active signatures and many near-zero contributions,** which is typical for WXS data where mutation counts per sample are insufficient to reliably decompose more than 2–3 signatures simultaneously.
 
 ---
 
 ### Plot 4 — Signature Boxplots by Group
-**`results/plots/plot4_boxplots.pdf`**
 
-Boxplots comparing the **relative exposure** of statistically significant signatures (FDR < 0.05) between early-onset and late-onset groups, with individual sample points overlaid as a jitter plot.
+![Signature Exposures: Early vs Late Onset BRCA](results/plots/plot4_boxplots.jpg)
 
-**How to read it:** Each panel shows one signature. The box spans the interquartile range (IQR), the line is the median, and whiskers extend to 1.5× IQR. Individual dots represent patients.
+**What is shown:** Boxplots comparing the relative exposure of COSMIC signatures that reached statistical significance (FDR < 0.05) between early-onset (red) and late-onset (blue) groups. Individual patient data points are overlaid as jitter. Eight signatures are shown: SBS1, SBS2, SBS30, SBS34, SBS38, SBS54, SBS60, and SBS88.
 
-**What to look for:**
-- Signatures where the median and IQR are clearly separated between groups
-- High within-group variance (wide boxes) indicating heterogeneity
-- Outlier samples with extremely high exposures
+**Detailed observations from this plot:**
+
+- **SBS1 (clock-like CpG deamination):** Both groups have similar medians (approximately 0.08–0.10), with the interquartile ranges substantially overlapping. The late-onset group appears to have a marginally wider spread and slightly more patients at higher exposures, consistent with the known age-correlated accumulation of SBS1. However, there are outliers with SBS1 relative exposures exceeding 0.75–0.90 in both groups, indicating that SBS1 dominance is sample-specific and not age-exclusive.
+- **SBS2 (APOBEC — C>T at TpCpN):** The early-onset median is modestly higher than late-onset, with the early-onset IQR sitting slightly above zero while the late-onset box spans a similar low range. However, both groups show extensive right-tail outliers reaching 0.3–0.49, and the overall difference is small. This is directionally consistent with the hypothesis of greater APOBEC activity in early-onset, but the magnitude is modest.
+- **SBS30 (base excision repair deficiency):** Median exposure is effectively zero in both groups. Both distributions are heavily right-skewed with a few outlier samples showing exposures up to 0.2–0.4. No meaningful difference is visually apparent between groups.
+- **SBS34 (unknown aetiology):** Both groups show medians at or near zero, with most samples having essentially no exposure. A handful of late-onset outliers reach up to 0.075–0.10. This signature is unlikely to be biologically meaningful at the cohort level.
+- **SBS38 (damage from UV light or platinum chemotherapy — context uncertain in breast cancer):** Medians are essentially zero in both groups, with sparse outliers up to 0.30 in late-onset and 0.05 in early-onset. The signature is not biologically expected to be prominent in breast cancer.
+- **SBS54 (artefact or unknown):** Late-onset shows a visibly higher median and IQR compared to early-onset, making this the most visually distinct comparison in the panel. However, the absolute exposure values are small, and SBS54 is not a well-characterised biologically meaningful signature in breast cancer — this likely reflects a technical or low-burden refitting artefact.
+- **SBS60 and SBS88:** Both have near-zero medians in both groups with sparse high outliers. These are poorly characterised signatures with uncertain biological relevance; their statistical significance likely reflects low-level noise.
+- **Key take-away:** Despite reaching nominal FDR significance, none of the eight signatures shows a large, clean separation between the two groups. Medians are close, IQRs broadly overlap, and many samples in each group are indistinguishable. The effect sizes are biologically modest.
 
 ---
 
 ### Plot 5 — Volcano Plot
-**`results/plots/plot5_volcano.pdf`**
 
-A volcano plot displaying **Log2 fold change** (x-axis, Early/Late) against **−log10 FDR-adjusted p-value** (y-axis) for all tested COSMIC signatures.
+![Volcano Plot: Signature Differences (Early vs Late Onset)](results/plots/plot5_volcano.jpg)
 
-**How to read it:**
-- Points in the **upper right** → significantly higher in early-onset
-- Points in the **upper left** → significantly higher in late-onset
-- Dashed horizontal line → FDR = 0.05 significance threshold
-- Dashed vertical lines → |Log2FC| = 0.5 effect size threshold
-- Red labelled points → statistically and biologically significant signatures
+**What is shown:** A volcano plot where each point represents one COSMIC SBS signature. The x-axis shows the Log2 fold change (Early/Late), with positive values indicating higher exposure in early-onset. The y-axis shows the −log10 of the FDR-adjusted p-value, so higher positions indicate greater statistical significance. The horizontal dashed line marks the FDR = 0.05 threshold; the two vertical dashed lines flank |Log2FC| = 0.5.
 
-**What to look for:**
-- SBS3 in the upper right (HRD enrichment in early-onset)
-- SBS5/SBS1 in the upper left (clock-like enrichment in late-onset)
-- Signatures near the origin → no meaningful difference between groups
+**Detailed observations from this plot:**
+
+- **No signature crosses the FDR = 0.05 significance threshold (horizontal dashed line).** The horizontal dashed line sits at the very top of the y-axis (at approximately −log10(0.05) ≈ 1.3), and all points cluster well below it. This is the central statistical finding of the analysis: after correcting for multiple comparisons across all tested COSMIC signatures, **no individual COSMIC signature is significantly differentially active between early-onset and late-onset breast cancer** at the FDR 5% level in this cohort.
+- **One outlier point lies in the upper-left quadrant** (approximately Log2FC ≈ −8 to −10, −log10(FDR) ≈ 0.65). This signature has a large negative fold change — meaning it is nominally higher in late-onset — but its adjusted p-value is still far from significance. The extreme negative Log2FC is likely driven by a signature with very low expression in early-onset samples (near-zero denominator), making the fold change numerically unstable rather than biologically meaningful.
+- **One outlier point lies far to the right** (approximately Log2FC ≈ 13–14, −log10(FDR) ≈ 0.13), indicating a signature nominally much higher in early-onset with an extreme fold change. Again, this almost certainly reflects a near-zero mean in the late-onset group combined with very sparse non-zero exposures in a few early-onset outliers — a statistical artefact rather than a genuine biological enrichment.
+- **The majority of signatures cluster tightly near the origin** (Log2FC between −1 and +1, −log10(FDR) near 0), indicating that most COSMIC signatures have very similar exposure distributions between the two groups and contribute negligible statistical signal.
+- **The absence of red labelled points** (which would denote signatures meeting both |Log2FC| > 0.5 and FDR < 0.05 thresholds simultaneously) confirms that no signature is both statistically significant and biologically meaningful by the pre-specified criteria.
+- **Biological interpretation of the null result:** This null result does not imply that early- and late-onset breast cancer are biologically identical. Rather, it suggests that: (1) the effect sizes of age-related signature differences are small relative to the within-group heterogeneity; (2) WXS data may have insufficient mutation counts to reliably decompose signatures at the individual sample level; and (3) the pooled analysis across all molecular subtypes (ER+/HER2+/TNBC) may dilute subtype-specific age effects. Subtype-stratified analyses and WGS data would provide greater power.
 
 ---
 
 ### Plot 6 — Cosine Similarity (Reconstruction Quality)
-**`results/plots/plot6_cosine_similarity.pdf`**
 
-A violin + boxplot showing the **cosine similarity** between each sample's observed mutational profile and the profile reconstructed from the fitted COSMIC signatures.
-
-**How to read it:** Cosine similarity ranges from 0 (completely different) to 1 (perfect reconstruction). Higher values mean the COSMIC signatures explain the sample's mutations well. Values >0.9 are generally considered good fits.
-
-**What to look for:**
-- Samples with low cosine similarity (<0.8) may harbour novel or poorly characterised mutational processes
-- Differences between groups in reconstruction quality could indicate that the COSMIC reference explains one group better than the other
-- A bimodal distribution within a group suggests two subpopulations with different mutational landscapes
+Assesses how well the COSMIC signature set reconstructs each sample's observed mutation profile. Cosine similarity ranges from 0 (no match) to 1 (perfect reconstruction). Values above 0.9 indicate that the fitted COSMIC signatures adequately explain the sample's mutational landscape. Samples with low cosine similarity (<0.8) may carry novel or poorly characterised processes not represented in COSMIC v3.3.1. A bimodal distribution within a group would suggest two subpopulations with fundamentally different mutational landscapes.
 
 ---
 
@@ -287,6 +292,10 @@ A violin + boxplot showing the **cosine similarity** between each sample's obser
 | SBS5 (Clock-like) | ↑ Late-onset | Accumulated replication errors over longer lifetime |
 | SBS1 (CpG deamination) | ↑ Late-onset | Age-associated methylation-driven mutations |
 
+### What the data actually show
+
+The results reveal **no statistically significant differences in COSMIC signature exposures between early-onset and late-onset breast cancer** after FDR correction (Plot 5). Directional trends exist — SBS2 (APOBEC) is modestly higher in early-onset, and SBS1 is nominally higher in late-onset — but these do not survive multiple-testing correction. The mutation spectrum (Plot 1) shows the two groups share the same dominant mutational processes, differing only quantitatively at specific trinucleotide contexts. The heatmap (Plot 3) confirms that onset age does not stratify tumours into distinct mutational subgroups. Taken together, the findings suggest that **age at onset, when considered independently of molecular subtype, is a weak predictor of COSMIC mutational signature composition in this cohort**.
+
 ---
 
 ## ⚠️ Limitations
@@ -295,6 +304,7 @@ A violin + boxplot showing the **cosine similarity** between each sample's obser
 - The Mann-Whitney U test is non-parametric but does not account for tumour purity, subtype heterogeneity (e.g. ER+/HER2+/TNBC), or technical batch effects
 - COSMIC refitting assumes all mutations are explained by known signatures; novel or composite processes may be misattributed
 - Age cutoffs (≤45 / ≥55) exclude intermediate-age patients to maximise contrast but reduce sample size
+- Low per-sample mutation burden in WXS data limits reliable multi-signature decomposition; signatures with sparse exposures may reflect refitting noise rather than genuine biological activity
 
 ---
 
