@@ -4,7 +4,7 @@
 [![Bioconductor](https://img.shields.io/badge/Bioconductor-3.17+-1a9641?style=flat-square)](https://bioconductor.org/)
 [![TCGA](https://img.shields.io/badge/Data-TCGA--BRCA-blue?style=flat-square)](https://portal.gdc.cancer.gov/)
 [![COSMIC](https://img.shields.io/badge/Signatures-COSMIC_v3.3.1-orange?style=flat-square)](https://cancer.sanger.ac.uk/signatures/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache_2.0-yellow?style=flat-square)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)]()
 [![GDC Client](https://img.shields.io/badge/GDC_Client-v1.6.1-lightgrey?style=flat-square)](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20WSL2-informational?style=flat-square&logo=linux&logoColor=white)]()
@@ -361,4 +361,4 @@ The absence of statistically significant findings is itself a result that narrow
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for details.
