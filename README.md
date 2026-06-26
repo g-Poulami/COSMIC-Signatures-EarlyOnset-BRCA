@@ -156,6 +156,8 @@ Per-signature comparison of exposures between groups: \`Early_median\`,
 
 ### Plot 1: 96-channel trinucleotide mutation spectrum
 
+![96-channel trinucleotide mutation spectrum](results/plots/plot1_mutation_spectrum.jpg)
+
 Relative frequency of all 96 single-base-substitution types across six
 substitution classes, averaged across early-onset (top) and late-onset (bottom)
 patients.
@@ -170,6 +172,8 @@ rather than as showing an APOBEC excess in young patients.)
 
 ### Plot 2: stacked bar chart of signature contributions
 
+![Per-sample signature contributions](results/plots/plot2_stacked_bar.jpg)
+
 Per-patient relative signature contributions, split by group. Inter-patient
 heterogeneity dominates both groups; no single signature uniformly dominates.
 SBS2 and SBS13 (APOBEC) appear prominently in a subset of samples in **both**
@@ -179,6 +183,8 @@ artefacts in low-burden samples, not biological signal.
 
 ### Plot 3: signature exposure heatmap
 
+![Signature exposure heatmap](results/plots/plot3_heatmap.jpg)
+
 Hierarchically clustered exposures, with an annotation bar for group. The column
 dendrogram does **not** separate early-onset from late-onset samples: the two
 groups are thoroughly interleaved, so the global signature profile does not
@@ -187,6 +193,8 @@ samples, typical of WXS data where per-sample mutation counts are too low to
 decompose more than two or three signatures reliably.
 
 ### Plot 4: signature boxplots by group
+
+![Signature boxplots by group](results/plots/plot4_boxplots.jpg)
 
 > **Corrected description.** This boxplot shows the signatures with the smallest
 > *uncorrected* p-values (SBS1, SBS2, SBS30, SBS34, SBS38, SBS54, SBS60, SBS88).
@@ -203,12 +211,16 @@ than genuine enrichment. No signature shows a large, clean group separation.
 
 ### Plot 5: volcano plot
 
+![Volcano plot](results/plots/plot5_volcano.jpg)
+
 Each point is a signature: x-axis Log2FC (Early/Late), y-axis -log10(adjusted
 p). **No point crosses the FDR = 0.05 line**, which is the central result. Points
 with extreme |Log2FC| arise from near-zero denominator medians (see the Log2FC
 note above) and are not genuine effects.
 
 ### Plot 6: cosine similarity (reconstruction quality)
+
+![Cosine similarity](results/plots/plot6_cosine_similarity.jpg)
 
 How well COSMIC v3.3.1 reconstructs each sample's observed profile. Values above
 0.9 indicate adequate fitting; values below 0.8 flag samples with too few
