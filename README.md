@@ -220,6 +220,7 @@ note above) and are not genuine effects.
 
 ### Plot 6: cosine similarity (reconstruction quality)
 
+![Cosine similarity](results/plots/plot6_cosine_similarity.jpg)
 
 How well COSMIC v3.3.1 reconstructs each sample's observed profile. Values above
 0.9 indicate adequate fitting; values below 0.8 flag samples with too few
