@@ -5,87 +5,97 @@
 [![TCGA](https://img.shields.io/badge/Data-TCGA--BRCA-blue?style=flat-square)](https://portal.gdc.cancer.gov/)
 [![COSMIC](https://img.shields.io/badge/Signatures-COSMIC_v3.3.1-orange?style=flat-square)](https://cancer.sanger.ac.uk/signatures/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-yellow?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)]()
-[![GDC Client](https://img.shields.io/badge/GDC_Client-v1.6.1-lightgrey?style=flat-square)](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20WSL2-informational?style=flat-square&logo=linux&logoColor=white)]()
 
 ---
 
-## Biological Question
+## Biological question
 
-Why do breast cancers diagnosed before age 45 behave clinically differently from those diagnosed after 55 — and can we see this difference written into the tumour's DNA?
+Why do breast cancers diagnosed before age 45 behave clinically differently from those diagnosed after 55, and can we see this difference written into the tumour's DNA?
 
-Every cancer accumulates a distinctive pattern of mutations shaped by the biological processes that drove its growth: DNA repair failures, enzymatic deaminase activity, ageing-related replication errors. These patterns, called **mutational signatures**, act as molecular fingerprints of tumourigenesis — preserved in the tumour genome long after the causative process has ceased. Comparing these fingerprints across age groups offers a window into the distinct aetiological forces operating in young versus older patients.
+Every cancer accumulates a distinctive pattern of mutations shaped by the biological processes that drove its growth: DNA repair failures, enzymatic deaminase activity, ageing-related replication errors. These patterns, called **mutational signatures**, act as molecular fingerprints of tumourigenesis, preserved in the tumour genome long after the causative process has ceased. Comparing these fingerprints across age groups offers a window into the distinct aetiological forces operating in young versus older patients.
 
-This question has direct clinical relevance. Early-onset breast cancer is enriched for germline BRCA1/2 mutations and homologous recombination deficiency (HRD), suggesting a different mutagenic biology from the clock-like, replication-error-driven processes that dominate in older patients. If APOBEC-associated or HRD signatures are systematically elevated in young patients, this has implications for germline testing thresholds, PARP inhibitor eligibility, and the design of age-stratified screening programmes.
+This question has direct clinical relevance. Early-onset breast cancer is enriched for germline BRCA1/2 mutations and homologous recombination deficiency (HRD), suggesting a different mutagenic biology from the clock-like, replication-error-driven processes that dominate in older patients. If APOBEC-associated or HRD signatures were systematically elevated in young patients, this would have implications for germline testing thresholds, PARP inhibitor eligibility, and the design of age-stratified screening programmes.
 
-This project addresses the question using **992 TCGA-BRCA whole-exome sequencing samples**, decomposing somatic mutations into COSMIC v3.3.1 signatures and statistically comparing exposures between early-onset (≤45 years) and late-onset (≥55 years) groups.
-
----
-
-## Key Finding
-
-> **After Benjamini-Hochberg FDR correction across all tested COSMIC signatures, no individual signature is significantly differentially active between early-onset and late-onset breast cancer in this cohort.**
-
-Directional trends exist and are biologically interpretable — APOBEC signatures (SBS2/SBS13) are modestly elevated in early-onset patients, and clock-like signatures (SBS1) show a marginal increase in late-onset — but these do not survive multiple-testing correction. The heatmap confirms that onset age does not stratify tumours into distinct mutational subgroups at the whole-cohort level.
-
-**This null result is scientifically informative, not a failure.** It tells us that:
-
-1. The effect sizes of age-related signature differences are small relative to within-group biological heterogeneity
-2. Whole-exome sequencing provides insufficient mutation counts per sample for reliable multi-signature decomposition
-3. Pooling across molecular subtypes (ER+, HER2+, TNBC) dilutes subtype-specific age effects
-4. Subtype-stratified analyses using whole-genome sequencing data are needed to resolve this question
-
-Reproducible negative results are an underrepresented but scientifically essential contribution to the field.
+This project addresses the question using TCGA-BRCA whole-exome sequencing (WXS) data. Of 992 mutation-annotated samples, 968 could be matched to an age at index; after excluding the intermediate age band (46 to 54), the comparison was performed on **132 early-onset** (age ≤45) and **554 late-onset** (age ≥55) patients.
 
 ---
 
-## Scientific Background
+## Key finding
 
-| Signature | Biological Process | Expected Direction | Mechanistic Basis |
-|-----------|-------------------|-------------------|-------------------|
-| **SBS3**  | Homologous recombination deficiency (HRD) | ↑ Early-onset | BRCA1/2 germline mutations impair HR repair; more prevalent in younger hereditary cases |
-| **SBS2**  | APOBEC cytidine deaminase (C>T at TpCpN) | ↑ Early-onset | APOBEC3A/B-driven mutagenesis associated with genomic instability in younger, hormone-driven tumours |
-| **SBS13** | APOBEC cytidine deaminase (C>G at TpCpN) | ↑ Early-onset | Co-occurs with SBS2; reflects the same APOBEC mutagenic process via a different repair pathway |
-| **SBS5**  | Clock-like replication-associated damage | ↑ Late-onset | Accumulates proportionally with number of cell divisions over a lifetime |
-| **SBS1**  | Spontaneous deamination of 5-methylcytosine | ↑ Late-onset | Age-correlated CpG→TpG transitions; nearly universal in cancer, increases with age |
+> **After Benjamini-Hochberg FDR correction, no COSMIC signature is significantly differentially active between early-onset and late-onset breast cancer in this cohort. The smallest adjusted p-value across all tested signatures is 0.24 (SBS54), far from the 0.05 threshold.**
 
-Early-onset breast cancer is frequently associated with germline BRCA1/2 dysfunction and HRD, while late-onset disease tends to accumulate clock-like signatures reflecting decades of replication. APOBEC-driven mutagenesis (SBS2/SBS13) is subtype-specific and heterogeneous, appearing prominently in a subset of tumours regardless of age.
+This comparison is also statistically underpowered on the early-onset side: at 132 early-onset versus 554 late-onset patients (a roughly 1-to-4 imbalance), combined with the low per-sample mutation counts of WXS, the analysis has limited power to detect a genuine early-onset-specific effect. The null result should therefore be read as "no detectable difference at this sample size and sequencing depth", not as strong evidence that no biological difference exists.
+
+The signatures with appreciable exposure show the following directional patterns, none of which survive correction:
+
+- **SBS1 (clock-like CpG deamination)** is modestly higher in late-onset (median 2.37 vs 1.72; raw p = 0.014, adjusted p = 0.35), directionally consistent with age-correlated accumulation.
+- **SBS2 (APOBEC, C>T)** is, contrary to the common expectation, *higher in late-onset* in this cohort (median 0.86 vs 0.28; raw p = 0.040, adjusted p = 0.44), not elevated in early-onset.
+- **SBS13 (APOBEC, C>G)** is essentially equal between groups (median 1.19 vs 1.14; raw p = 0.90).
+
+So the data do **not** support the frequently stated hypothesis that APOBEC mutagenesis is elevated in early-onset disease, at least not at the whole-cohort, pooled-subtype level measured here. The HRD signature SBS3 has a median exposure of 0 in both groups (it is essentially undetectable in this WXS refit), so the hypothesised HRD enrichment in early-onset cannot be assessed from these data.
+
+**This null result is scientifically informative, not a failure.** It indicates that:
+
+1. Age-related signature differences, if present, are small relative to within-group biological heterogeneity.
+2. Whole-exome sequencing yields too few mutations per sample for reliable multi-signature decomposition (most signatures refit to a median of exactly 0).
+3. Pooling across molecular subtypes (ER+, HER2+, TNBC) dilutes any subtype-specific age effect.
+4. Subtype-stratified analyses using whole-genome sequencing are needed to resolve the question.
+
+Reproducible negative results are an underrepresented but scientifically essential contribution.
 
 ---
 
-## Repository Structure
+## Quantified summary
 
-```
+The seven signatures with the smallest adjusted p-values (none significant):
+
+| Signature | Early median | Late median | Higher in | Raw p | Adjusted p |
+|-----------|-------------:|------------:|-----------|------:|-----------:|
+| SBS54 | 0.00 | 0.01 | late (negligible) | 0.003 | 0.24 |
+| SBS1  | 1.72 | 2.37 | late | 0.014 | 0.35 |
+| SBS30 | 0.00 | 0.00 | neither | 0.013 | 0.35 |
+| SBS2  | 0.28 | 0.86 | late | 0.040 | 0.44 |
+| SBS34 | 0.00 | 0.00 | neither | 0.026 | 0.44 |
+| SBS38 | 0.00 | 0.00 | neither | 0.029 | 0.44 |
+| SBS88 | 0.00 | 0.00 | neither | 0.035 | 0.44 |
+
+Note that four of these (SBS30, SBS34, SBS38, SBS88) have a median of zero in **both** groups: their small raw p-values arise from sparse non-zero exposures in a handful of low-burden samples, and are best read as refitting noise rather than biological signal. Only SBS1 and SBS2 have a real, interpretable exposure difference, and neither survives FDR correction.
+
+---
+
+## Scientific background (literature expectations)
+
+The table below lists what prior literature would predict. The right-hand column records what this analysis actually found, which diverges from expectation for APOBEC.
+
+| Signature | Process | Literature prediction | This analysis |
+|-----------|---------|----------------------|---------------|
+| **SBS3**  | Homologous recombination deficiency (HRD) | ↑ Early-onset (BRCA1/2) | Median 0 in both groups; not assessable in WXS refit |
+| **SBS2**  | APOBEC cytidine deaminase (C>T) | ↑ Early-onset | Higher in late-onset; not FDR-significant |
+| **SBS13** | APOBEC cytidine deaminase (C>G) | ↑ Early-onset | Essentially equal; not significant |
+| **SBS5**  | Clock-like replication damage | ↑ Late-onset | Median 0 in both groups; not assessable |
+| **SBS1**  | Spontaneous 5mC deamination | ↑ Late-onset | Higher in late-onset (directionally consistent); not FDR-significant |
+
+---
+
+## Repository structure
+
+\`\`\`
 COSMIC-Signatures-EarlyOnset-BRCA/
-│
 ├── scripts/
 │   ├── signature_analysis.R       # Main analysis pipeline
-│   ├── plot_signatures.R          # Comprehensive visualisation script
+│   ├── plot_signatures.R          # Visualisation script
 │   ├── fix_prepare.R              # MAF file ingestion utility
 │   └── fix_clinical.R             # Clinical data fetching utility
-│
 ├── results/
-│   ├── plots/
-│   │   ├── plot1_mutation_spectrum.jpg    # 96-channel trinucleotide profiles
-│   │   ├── plot2_stacked_bar.jpg         # Per-sample stacked bar chart
-│   │   ├── plot3_heatmap.jpg             # Signature exposure heatmap
-│   │   ├── plot4_boxplots.jpg            # Signature boxplots by group
-│   │   ├── plot5_volcano.jpg             # Volcano plot
-│   │   └── plot6_cosine_similarity.jpg   # Reconstruction quality
+│   ├── plots/                     # plot1..plot6 (.jpg)
 │   └── data/
-│       ├── maf_combined.rds              # Combined MAF data (992 samples)
-│       ├── clinical.rds                  # Clinical metadata
-│       └── signature_stats_results.csv   # Statistical comparison results
-│
-├── gdc_tool/
-│   ├── gdc-client                        # GDC Data Transfer Tool binary
-│   ├── gdc_manifest.txt                  # Download manifest (992 files)
-│   └── gdc_client_configuration.dtt      # GDC client config
-│
+│       ├── maf_combined.rds
+│       ├── clinical.rds
+│       └── signature_stats_results.csv
+├── gdc_tool/                      # GDC Data Transfer Tool + manifest
 ├── .gitignore
 └── README.md
-```
+\`\`\`
 
 ---
 
@@ -93,272 +103,190 @@ COSMIC-Signatures-EarlyOnset-BRCA/
 
 | Property | Details |
 |----------|---------|
-| **Project** | TCGA-BRCA |
-| **Data type** | Masked Somatic Mutation (WXS) |
-| **Workflow** | Aliquot Ensemble Somatic Variant Merging and Masking |
-| **Genome build** | GRCh38 / hg38 |
-| **Total samples** | 992 |
-| **Early-onset (≤45)** | Extracted from GDC clinical API |
-| **Late-onset (≥55)** | Extracted from GDC clinical API |
-| **COSMIC version** | v3.3.1 SBS signatures |
+| Project | TCGA-BRCA |
+| Data type | Masked Somatic Mutation (WXS) |
+| Workflow | Aliquot Ensemble Somatic Variant Merging and Masking |
+| Genome build | GRCh38 / hg38 |
+| Total samples | 992 |
+| Early-onset (≤45) | **132** |
+| Late-onset (≥55) | **554** |
+| COSMIC version | v3.3.1 SBS signatures |
 
 ---
 
-## Dependencies
+## Reproducing the analysis
 
-### R Packages
-
-```r
-# Bioconductor
-BiocManager::install(c(
-    "TCGAbiolinks",
-    "maftools",
-    "MutationalPatterns",
-    "BSgenome.Hsapiens.UCSC.hg38",
-    "GenomicRanges",
-    "GenomeInfoDb",
-    "Biostrings"
-))
-
-# CRAN
-install.packages(c(
-    "ggplot2",
-    "dplyr",
-    "tidyr",
-    "pheatmap",
-    "RColorBrewer",
-    "gridExtra",
-    "data.table",
-    "jsonlite"
-))
-```
-
-### System Tools
-
-- [GDC Data Transfer Tool v1.6.1](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool) (Ubuntu x64)
-- R ≥ 4.2
-- Bioconductor ≥ 3.17
-
----
-
-## Reproducing the Analysis
-
-### 1. Clone the repository
-
-```bash
+\`\`\`bash
 git clone https://github.com/g-Poulami/COSMIC-Signatures-EarlyOnset-BRCA.git
 cd COSMIC-Signatures-EarlyOnset-BRCA
-```
 
-### 2. Download the data
-
-```bash
-# Download 992 TCGA-BRCA MAF files using the provided manifest
+# Download 992 TCGA-BRCA MAF files (single-threaded avoids a GDC client
+# multiprocessing bug on WSL/Linux)
 ./gdc_tool/gdc-client download -m gdc_tool/gdc_manifest.txt -n 1
-```
 
-> **Note:** The `-n 1` flag forces single-threaded downloading, which avoids a known Python multiprocessing pickling bug in the GDC client on WSL/Linux environments.
+Rscript scripts/fix_prepare.R       # combine MAFs -> results/data/maf_combined.rds
+Rscript scripts/fix_clinical.R      # fetch age -> results/data/clinical.rds
+Rscript scripts/signature_analysis.R# decomposition + statistics
+Rscript scripts/plot_signatures.R   # figures
+\`\`\`
 
-### 3. Prepare the MAF data
+### Dependencies
 
-```bash
-Rscript scripts/fix_prepare.R
-```
-
-This reads all 992 `.maf.gz` files, handles type inconsistencies across files, and saves a combined `results/data/maf_combined.rds`.
-
-### 4. Fetch clinical data
-
-```bash
-Rscript scripts/fix_clinical.R
-```
-
-Fetches age-at-diagnosis data directly from the GDC API and saves `results/data/clinical.rds`.
-
-### 5. Run the main analysis
-
-```bash
-Rscript scripts/signature_analysis.R
-```
-
-### 6. Generate all plots
-
-```bash
-Rscript scripts/plot_signatures.R
-```
+Bioconductor: \`TCGAbiolinks\`, \`maftools\`, \`MutationalPatterns\`,
+\`BSgenome.Hsapiens.UCSC.hg38\`, \`GenomicRanges\`, \`GenomeInfoDb\`, \`Biostrings\`.
+CRAN: \`ggplot2\`, \`dplyr\`, \`tidyr\`, \`pheatmap\`, \`RColorBrewer\`, \`gridExtra\`,
+\`data.table\`, \`jsonlite\`. System: GDC Data Transfer Tool v1.6.1, R ≥ 4.2,
+Bioconductor ≥ 3.17.
 
 ---
 
-## Outputs & Interpretation
+## Outputs and interpretation
 
-### `signature_stats_results.csv`
+### \`signature_stats_results.csv\`
 
-Statistical comparison of COSMIC signature exposures between early-onset and late-onset groups.
+Per-signature comparison of exposures between groups: \`Early_median\`,
+\`Late_median\`, \`Log2FC\` (Early/Late), \`W_statistic\`, \`P_value\`, \`P_adj\`
+(Benjamini-Hochberg).
 
-| Column | Description |
-|--------|-------------|
-| `Signature` | COSMIC SBS signature identifier |
-| `Early_median` | Median absolute exposure in early-onset patients |
-| `Late_median` | Median absolute exposure in late-onset patients |
-| `Log2FC` | Log2 fold change (Early / Late) |
-| `W_statistic` | Mann-Whitney U test statistic |
-| `P_value` | Raw p-value |
-| `P_adj` | Benjamini-Hochberg FDR-corrected p-value |
+> **Note on \`Log2FC\`:** where a group median is 0, the fold change is undefined
+> and the reported value (e.g. SBS54 = -13.5, SBS15 = +13.8) is a numerical
+> artefact of a near-zero denominator, not a real effect. Treat any \`Log2FC\`
+> derived from a zero median as not interpretable. A cleaner version of the
+> pipeline reports these as \`NA\`.
 
-Signatures with `P_adj < 0.05` and `|Log2FC| > 0.5` are considered statistically and biologically significant.
+### Plot 1: 96-channel trinucleotide mutation spectrum
 
----
+Relative frequency of all 96 single-base-substitution types across six
+substitution classes, averaged across early-onset (top) and late-onset (bottom)
+patients.
 
-### Plot 1 — 96-Channel Trinucleotide Mutation Spectrum
+Both groups are dominated by C>T transitions, as expected for breast cancer, and
+the two profiles share the same dominant mutational processes, differing only
+quantitatively. The trinucleotide differences between groups are small and, as
+the statistics confirm, none is robust after correction. (Earlier drafts read a
+prominent early-onset C>G / APOBEC signal off this plot; the per-signature
+medians do not support that, so the spectra should be read as broadly similar
+rather than as showing an APOBEC excess in young patients.)
 
-![96-Channel Trinucleotide Mutation Spectrum by Onset Group](results/plots/plot1_mutation_spectrum.jpg)
+### Plot 2: stacked bar chart of signature contributions
 
-**What is shown:** The relative frequency of all 96 single base substitution (SBS) mutation types across six substitution classes (C>A in blue, C>G in black, C>T in red, T>A in grey, T>C in green, T>G in pink), each broken into 16 trinucleotide contexts, averaged across early-onset (top row) and late-onset (bottom row) patients.
+Per-patient relative signature contributions, split by group. Inter-patient
+heterogeneity dominates both groups; no single signature uniformly dominates.
+SBS2 and SBS13 (APOBEC) appear prominently in a subset of samples in **both**
+groups, confirming that APOBEC activity is sample-specific rather than
+age-stratified. Relative exposures above 1.0 in a few samples are NNLS refitting
+artefacts in low-burden samples, not biological signal.
 
-**Biological interpretation:**
+### Plot 3: signature exposure heatmap
 
-- **C>G transversions are the most visually striking feature of the early-onset spectrum.** Elevated C>G signal at T[C>G]T and flanking contexts in early-onset is consistent with heightened APOBEC-like or oxidative mutagenic activity in younger patients.
-- **C>T transitions dominate both groups**, as expected for breast cancer. The tallest C>T peak at TpCpN contexts — a hallmark of APOBEC activity (SBS2/SBS13) — is modestly higher in early-onset, directionally consistent with the APOBEC hypothesis but not statistically distinguishing.
-- **C>A transversions show a late-onset asymmetry** at one context (likely T[C>A]T), which may reflect SBS18 or oxidative damage accumulating with age.
-- **Overall spectrum similarity:** The two profiles share the same dominant mutational processes, differing quantitatively rather than qualitatively. This is consistent with the statistical finding of no significant differences after FDR correction — the age-related signal is present but too small to overcome within-group heterogeneity at this sample size.
+Hierarchically clustered exposures, with an annotation bar for group. The column
+dendrogram does **not** separate early-onset from late-onset samples: the two
+groups are thoroughly interleaved, so the global signature profile does not
+predict age of onset. Most signatures show near-zero exposure across most
+samples, typical of WXS data where per-sample mutation counts are too low to
+decompose more than two or three signatures reliably.
 
----
+### Plot 4: signature boxplots by group
 
-### Plot 2 — Stacked Bar Chart of Signature Contributions
+> **Corrected description.** This boxplot shows the signatures with the smallest
+> *uncorrected* p-values (SBS1, SBS2, SBS30, SBS34, SBS38, SBS54, SBS60, SBS88).
+> **None of these is significant after FDR correction** (smallest adjusted
+> p-value overall is 0.24). They are shown to illustrate that even the
+> nominally-strongest candidates do not hold up, not because they passed any
+> significance threshold.
 
-![Relative COSMIC Signature Contributions per Sample](results/plots/plot2_stacked_bar.jpg)
+Reading them: SBS1 and SBS2 are the only two with non-trivial exposure, and both
+are higher in late-onset, not early. The remaining signatures (SBS30, SBS34,
+SBS38, SBS54, SBS60, SBS88) have medians at or near zero in both groups, so their
+small raw p-values reflect refitting noise in sparse, low-burden samples rather
+than genuine enrichment. No signature shows a large, clean group separation.
 
-**What is shown:** Relative COSMIC signature contributions per patient (one bar = one patient), split into early-onset (left) and late-onset (right) panels. Only signatures with mean relative exposure >1% are shown.
+### Plot 5: volcano plot
 
-**Biological interpretation:**
+Each point is a signature: x-axis Log2FC (Early/Late), y-axis -log10(adjusted
+p). **No point crosses the FDR = 0.05 line**, which is the central result. Points
+with extreme |Log2FC| arise from near-zero denominator medians (see the Log2FC
+note above) and are not genuine effects.
 
-- **Inter-patient heterogeneity is the dominant feature in both groups.** No single signature uniformly dominates — the colour composition varies dramatically per patient, reflecting the well-known molecular heterogeneity of breast cancer across ER+, HER2+, and TNBC subtypes pooled in TCGA-BRCA.
-- **Outlier samples with relative exposures >1.0** are statistical artefacts from NNLS refitting in low-mutation-burden samples, not genuine biological signal. These are more frequent in the larger late-onset cohort.
-- **SBS2 and SBS13 (APOBEC)** appear as prominent segments in a subset of samples in both groups — confirming that APOBEC activity is a sample-specific rather than age-stratified phenomenon at cohort level.
-- **SBS1 (clock-like CpG deamination)** contributes a consistent baseline across most samples in both groups, as expected for a near-universal age-correlated process.
+### Plot 6: cosine similarity (reconstruction quality)
 
----
-
-### Plot 3 — Signature Exposure Heatmap
-
-![Signature Exposure Heatmap (Early vs Late Onset)](results/plots/plot3_heatmap.jpg)
-
-**What is shown:** Hierarchically clustered heatmap of COSMIC signature exposures. Each column is a patient; each row is a signature. The annotation bar colour-codes samples by group (red = early-onset, blue = late-onset).
-
-**Biological interpretation:**
-
-- **The column dendrogram does not separate early-onset from late-onset samples into distinct clusters.** Early and late-onset samples are thoroughly interleaved across the dendrogram — confirming that the global mutational signature profile does not reliably predict age of onset. Onset age is a weak discriminator of mutational subgroup identity at the whole-cohort, whole-subtype level.
-- **SBS2 and SBS13 cluster together** with the highest exposure values, concentrated in a subset of samples scattered across both groups — reinforcing the sample-specific nature of APOBEC mutagenesis.
-- **Most signatures show near-zero exposure** across the majority of samples, which is typical for WXS data where per-sample mutation counts are insufficient to reliably decompose more than 2–3 signatures simultaneously.
-
----
-
-### Plot 4 — Signature Boxplots by Group
-
-![Signature Exposures: Early vs Late Onset BRCA](results/plots/plot4_boxplots.jpg)
-
-**What is shown:** Boxplots of relative exposure for the eight signatures reaching FDR < 0.05 (SBS1, SBS2, SBS30, SBS34, SBS38, SBS54, SBS60, SBS88), comparing early-onset (red) vs late-onset (blue). Individual data points are overlaid.
-
-**Biological interpretation:**
-
-- **SBS1 (clock-like):** Both groups show similar medians with overlapping IQRs. The late-onset group has a marginally wider spread, consistent with the known age-correlated accumulation of SBS1, but the difference is modest.
-- **SBS2 (APOBEC):** Early-onset median is marginally higher, directionally consistent with greater APOBEC activity in younger patients, but the distributions substantially overlap with extensive right-tail outliers in both groups.
-- **SBS30, SBS34, SBS38, SBS54, SBS60, SBS88:** Medians are at or near zero in both groups. Their nominal FDR significance likely reflects refitting noise in low-mutation-burden samples rather than genuine biological enrichment. SBS54 shows the most visually distinct group separation but is a poorly characterised signature in breast cancer.
-- **Key take-away:** Despite reaching nominal FDR significance, none of the eight signatures shows a large, clean separation. Effect sizes are biologically modest — the statistical significance is driven by the large sample size amplifying small distributional differences.
+How well COSMIC v3.3.1 reconstructs each sample's observed profile. Values above
+0.9 indicate adequate fitting; values below 0.8 flag samples with too few
+mutations for reliable decomposition or processes not captured by COSMIC v3.3.1.
 
 ---
 
-### Plot 5 — Volcano Plot
-
-![Volcano Plot: Signature Differences (Early vs Late Onset)](results/plots/plot5_volcano.jpg)
-
-**What is shown:** Each point represents one COSMIC SBS signature. X-axis: Log2 fold change (Early/Late; positive = higher in early-onset). Y-axis: −log10(FDR-adjusted p-value). Dashed lines mark FDR = 0.05 and |Log2FC| = 0.5.
-
-**Biological interpretation:**
-
-- **No signature crosses the FDR = 0.05 significance threshold.** All points cluster well below the horizontal dashed line — the central statistical finding of this analysis. After correcting for multiple comparisons, no COSMIC signature is significantly differentially active between age groups.
-- **Two extreme outlier points** with very large |Log2FC| values reflect near-zero denominator means causing numerically unstable fold changes, not genuine biological enrichment.
-- **The majority of signatures cluster near the origin**, indicating similar exposure distributions between groups and negligible statistical signal.
-- **The absence of labelled significant points** confirms no signature meets both the statistical (FDR < 0.05) and biological (|Log2FC| > 0.5) significance criteria simultaneously.
-
----
-
-### Plot 6 — Cosine Similarity (Reconstruction Quality)
-
-![Cosine Similarity Distribution](results/plots/plot6_cosine_similarity.jpg)
-
-Assesses how well the COSMIC v3.3.1 signature set reconstructs each sample's observed mutation profile. Values above 0.9 indicate that the fitted signatures adequately explain the sample's mutational landscape. Samples below 0.8 may carry novel or poorly characterised processes not represented in COSMIC v3.3.1, or may simply have too few mutations for reliable fitting. A bimodal distribution within a group would suggest two subpopulations with fundamentally different mutational architectures.
-
----
-
-## Biological Interpretation & Discussion
+## Discussion
 
 ### What the data show
 
-The results reveal **no statistically significant differences in COSMIC signature exposures between early-onset and late-onset breast cancer** after FDR correction (Plot 5). Directional trends are present and biologically consistent with prior literature:
-
-- SBS2/SBS13 (APOBEC) are modestly elevated in early-onset
-- SBS1 (clock-like CpG deamination) is nominally higher in late-onset
-
-However, these trends do not survive multiple-testing correction. The mutation spectrum (Plot 1) shows the two groups share the same dominant mutational processes. The heatmap (Plot 3) confirms that onset age does not stratify tumours into distinct mutational subgroups. **Taken together, the findings suggest that age at onset, when considered independently of molecular subtype, is a weak predictor of COSMIC mutational signature composition in this cohort.**
-
-### What the literature predicts vs what was found
-
-| Signature | Literature prediction | This analysis |
-|-----------|----------------------|---------------|
-| SBS3 (HRD) | ↑ Early-onset (BRCA1/2 enrichment) | No significant difference |
-| SBS2/SBS13 (APOBEC) | ↑ Early-onset | Directional trend only; not FDR-significant |
-| SBS5 (clock-like) | ↑ Late-onset | No significant difference |
-| SBS1 (CpG deamination) | ↑ Late-onset | Directional trend only; not FDR-significant |
+After FDR correction, there are no significant differences in COSMIC signature
+exposures between early-onset and late-onset breast cancer (smallest adjusted
+p = 0.24). Among the signatures with real exposure, SBS1 (clock-like) is
+directionally higher in late-onset, consistent with expectation, while SBS2
+(APOBEC) is also higher in late-onset, which runs counter to the common
+hypothesis of APOBEC enrichment in early-onset disease. SBS13 is flat. The
+heatmap confirms that onset age does not stratify tumours into distinct
+mutational subgroups. Taken together, age at onset, considered independently of
+molecular subtype, is a weak predictor of COSMIC signature composition in this
+cohort, and the specific APOBEC-in-early hypothesis is not supported here.
 
 ### Why the null result is informative
 
-The absence of statistically significant findings is itself a result that narrows the hypothesis space:
-
-1. **Power limitation of WXS:** Whole-exome sequencing captures ~2% of the genome. The median mutation burden per sample in this cohort is insufficient for reliable decomposition of more than 2–3 signatures simultaneously, reducing sensitivity to detect modest differences.
-2. **Subtype heterogeneity as a confounder:** TCGA-BRCA pools ER+, HER2+, and TNBC tumours, each with distinct signature profiles. The age-related signal (e.g. SBS3 enrichment in hereditary cases) may be concentrated in a specific subtype (TNBC or ER-negative) but diluted to non-significance in the pooled analysis.
-3. **Small effect sizes relative to inter-patient variance:** Breast cancer is biologically heterogeneous. The within-group variance of signature exposures is large, requiring either much larger sample sizes or reduced variance (via subtype stratification) to detect the age signal.
-4. **The age cutoffs exclude intermediate patients:** The ≤45/≥55 design maximises contrast but reduces sample size and may still include aetiologically heterogeneous tumours within each group.
+1. **Power limitation of WXS:** exome sequencing captures ~2% of the genome;
+   per-sample mutation counts are too low to decompose more than two or three
+   signatures reliably, which is why most signatures refit to a median of 0.
+2. **Subtype heterogeneity as a confounder:** pooling ER+, HER2+, and TNBC may
+   dilute a subtype-specific age effect (for example HRD/SBS3 enrichment
+   concentrated in TNBC) to non-significance.
+3. **Small effect sizes relative to inter-patient variance:** breast cancer is
+   heterogeneous; detecting a modest age signal needs larger samples or reduced
+   variance via stratification.
+4. **Age cutoffs:** the ≤45 / ≥55 design maximises contrast but reduces sample
+   size and still admits aetiologically heterogeneous tumours within each group.
 
 ### Recommended next steps
 
-- Subtype-stratified analysis (TNBC separately, as the subtype most enriched for BRCA1/2 dysfunction and HRD)
-- Whole-genome sequencing data (higher mutation counts; more reliable signature fitting; access to SV-based HRD metrics)
-- Integration of germline BRCA1/2 status as a covariate to directly test whether HRD enrichment in early-onset is explained by germline carrier status
-- Larger external cohorts (METABRIC, ICGC) to increase power
+- Subtype-stratified analysis, TNBC separately (most enriched for BRCA1/2 and HRD).
+- Whole-genome sequencing for higher mutation counts and reliable HRD/SBS3 fitting.
+- Germline BRCA1/2 status as a covariate to test HRD enrichment directly.
+- Larger external cohorts (METABRIC, ICGC) for power.
 
 ---
 
 ## Limitations
 
-- Analysis restricted to WXS data; whole-genome sequencing would provide higher mutation counts and more reliable signature fitting
-- The Mann-Whitney U test is non-parametric but does not account for tumour purity, subtype heterogeneity (ER+/HER2+/TNBC), or technical batch effects
-- COSMIC refitting assumes all mutations are explained by known signatures; novel or composite processes may be misattributed
-- Age cutoffs (≤45 / ≥55) exclude intermediate-age patients to maximise contrast but reduce sample size
-- Low per-sample mutation burden in WXS data limits reliable multi-signature decomposition; signatures with sparse exposures may reflect refitting noise rather than genuine biological activity
-- Germline BRCA1/2 status was not available as a covariate for this analysis
+- **Group imbalance and small early-onset arm.** The early-onset group (n = 132) is roughly a quarter the size of the late-onset group (n = 554), reducing power to detect early-onset-specific signatures even where one exists.
+- WXS only; whole-genome data would give higher mutation counts and more reliable
+  signature fitting. Most signatures here refit to a median of 0, limiting what
+  can be concluded.
+- The Mann-Whitney U test does not account for tumour purity, subtype
+  (ER+/HER2+/TNBC), or batch effects.
+- COSMIC refitting assumes all mutations come from known signatures; novel or
+  composite processes may be misattributed, and sparse exposures may be noise.
+- \`Log2FC\` values derived from a zero group median are numerical artefacts and
+  are not interpretable.
+- Age cutoffs (≤45 / ≥55) exclude intermediate-age patients.
+- Germline BRCA1/2 status was not available as a covariate.
 
 ---
 
 ## References
 
-1. Alexandrov et al. (2020). The repertoire of mutational signatures in human cancer. *Nature*, 578, 94–101.
-2. COSMIC Mutational Signatures v3.3.1 — https://cancer.sanger.ac.uk/signatures/
-3. Blokzijl et al. (2018). MutationalPatterns: comprehensive genome-wide analysis of mutational processes. *Genome Medicine*, 10, 33.
-4. Colaprico et al. (2016). TCGAbiolinks: an R/Bioconductor package for integrative analysis of TCGA data. *Nucleic Acids Research*, 44(8), e71.
-5. Mayakonda et al. (2018). Maftools: efficient and comprehensive analysis of somatic variants in cancer. *Genome Research*, 28, 1747–1756.
-6. Burns et al. (2013). APOBEC3B is an enzymatic source of mutation in breast cancer. *Nature Genetics*, 45, 229–233.
-7. Tutt et al. (2021). Adjuvant olaparib for patients with BRCA1- or BRCA2-mutated breast cancer. *New England Journal of Medicine*, 384, 2394–2405.
+1. Alexandrov et al. (2020). The repertoire of mutational signatures in human cancer. *Nature*, 578, 94-101.
+2. COSMIC Mutational Signatures v3.3.1. https://cancer.sanger.ac.uk/signatures/
+3. Blokzijl et al. (2018). MutationalPatterns. *Genome Medicine*, 10, 33.
+4. Colaprico et al. (2016). TCGAbiolinks. *Nucleic Acids Research*, 44(8), e71.
+5. Mayakonda et al. (2018). Maftools. *Genome Research*, 28, 1747-1756.
+6. Burns et al. (2013). APOBEC3B is an enzymatic source of mutation in breast cancer. *Nature Genetics*, 45, 229-233.
+7. Tutt et al. (2021). Adjuvant olaparib for BRCA1/2-mutated breast cancer. *New England Journal of Medicine*, 384, 2394-2405.
 
 ---
 
 ## Author
 
-**Poulami Ghosh** — [@g-Poulami](https://github.com/g-Poulami)
-[LinkedIn](https://linkedin.com/in/poulami-ghosh-879439304) · [Google Scholar](https://scholar.google.com/scholar?q=Poulami+Ghosh) · poulamighosh738@gmail.com
-
----
+**Poulami Ghosh**, [@g-Poulami](https://github.com/g-Poulami) · [LinkedIn](https://linkedin.com/in/poulami-ghosh-879439304) · poulamighosh738@gmail.com
 
 ## License
 
-This project is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for details.
+Apache License, Version 2.0. See [LICENSE](LICENSE).
