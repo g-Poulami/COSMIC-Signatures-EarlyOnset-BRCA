@@ -79,7 +79,7 @@ The table below lists what prior literature would predict. The right-hand column
 
 ## Repository structure
 
-\`\`\`
+```
 COSMIC-Signatures-EarlyOnset-BRCA/
 ├── scripts/
 │   ├── signature_analysis.R       # Main analysis pipeline
@@ -95,7 +95,7 @@ COSMIC-Signatures-EarlyOnset-BRCA/
 ├── gdc_tool/                      # GDC Data Transfer Tool + manifest
 ├── .gitignore
 └── README.md
-\`\`\`
+```
 
 ---
 
@@ -116,7 +116,7 @@ COSMIC-Signatures-EarlyOnset-BRCA/
 
 ## Reproducing the analysis
 
-\`\`\`bash
+```bash
 git clone https://github.com/g-Poulami/COSMIC-Signatures-EarlyOnset-BRCA.git
 cd COSMIC-Signatures-EarlyOnset-BRCA
 
@@ -128,31 +128,31 @@ Rscript scripts/fix_prepare.R       # combine MAFs -> results/data/maf_combined.
 Rscript scripts/fix_clinical.R      # fetch age -> results/data/clinical.rds
 Rscript scripts/signature_analysis.R# decomposition + statistics
 Rscript scripts/plot_signatures.R   # figures
-\`\`\`
+```
 
 ### Dependencies
 
-Bioconductor: \`TCGAbiolinks\`, \`maftools\`, \`MutationalPatterns\`,
-\`BSgenome.Hsapiens.UCSC.hg38\`, \`GenomicRanges\`, \`GenomeInfoDb\`, \`Biostrings\`.
-CRAN: \`ggplot2\`, \`dplyr\`, \`tidyr\`, \`pheatmap\`, \`RColorBrewer\`, \`gridExtra\`,
-\`data.table\`, \`jsonlite\`. System: GDC Data Transfer Tool v1.6.1, R ≥ 4.2,
+Bioconductor: `TCGAbiolinks`, `maftools`, `MutationalPatterns`,
+`BSgenome.Hsapiens.UCSC.hg38`, `GenomicRanges`, `GenomeInfoDb`, `Biostrings`.
+CRAN: `ggplot2`, `dplyr`, `tidyr`, `pheatmap`, `RColorBrewer`, `gridExtra`,
+`data.table`, `jsonlite`. System: GDC Data Transfer Tool v1.6.1, R ≥ 4.2,
 Bioconductor ≥ 3.17.
 
 ---
 
 ## Outputs and interpretation
 
-### \`signature_stats_results.csv\`
+### `signature_stats_results.csv`
 
-Per-signature comparison of exposures between groups: \`Early_median\`,
-\`Late_median\`, \`Log2FC\` (Early/Late), \`W_statistic\`, \`P_value\`, \`P_adj\`
+Per-signature comparison of exposures between groups: `Early_median`,
+`Late_median`, `Log2FC` (Early/Late), `W_statistic`, `P_value`, `P_adj`
 (Benjamini-Hochberg).
 
-> **Note on \`Log2FC\`:** where a group median is 0, the fold change is undefined
+> **Note on `Log2FC`:** where a group median is 0, the fold change is undefined
 > and the reported value (e.g. SBS54 = -13.5, SBS15 = +13.8) is a numerical
-> artefact of a near-zero denominator, not a real effect. Treat any \`Log2FC\`
+> artefact of a near-zero denominator, not a real effect. Treat any `Log2FC`
 > derived from a zero median as not interpretable. A cleaner version of the
-> pipeline reports these as \`NA\`.
+> pipeline reports these as `NA`.
 
 ### Plot 1: 96-channel trinucleotide mutation spectrum
 
@@ -276,7 +276,7 @@ cohort, and the specific APOBEC-in-early hypothesis is not supported here.
   (ER+/HER2+/TNBC), or batch effects.
 - COSMIC refitting assumes all mutations come from known signatures; novel or
   composite processes may be misattributed, and sparse exposures may be noise.
-- \`Log2FC\` values derived from a zero group median are numerical artefacts and
+- `Log2FC` values derived from a zero group median are numerical artefacts and
   are not interpretable.
 - Age cutoffs (≤45 / ≥55) exclude intermediate-age patients.
 - Germline BRCA1/2 status was not available as a covariate.
